@@ -1,16 +1,9 @@
-# Compiled class file
 *.class
 
-# Log file
+# Log files
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Package and archive files
 *.jar
 *.war
 *.nar
@@ -19,10 +12,38 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Virtual machine crash logs
 hs_err_pid*
 replay_pid*
 
-# Others
-.mvn
-.vscode
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle / NetBeans build directories (general)
+build/
+
+
+## STS (Spring Tool Suite)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+## VS Code
+.vscode/
+
+# Source tree exceptions (keep target/ and build/ in src dirs)
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
