@@ -11,8 +11,8 @@
 	<groupId>com.example</groupId>
 	<artifactId>Obfuscator-x</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Obfuscator-x</name>
+	<description>Obfuscator-x a tool to obfuscate string with Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -32,7 +32,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
 		<dependency>
