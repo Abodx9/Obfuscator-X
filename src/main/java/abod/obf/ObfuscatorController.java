@@ -17,4 +17,10 @@ public class ObfuscatorController {
   public String obfPy(@RequestBody String input) {
     return Tricks.encode_Py(input);
   }
+
+
+  @GetMapping("/encode-ja")
+  public String obfJa(@RequestBody String input) {
+    return Tricks.encode_Ja(input);
+  }
 }
