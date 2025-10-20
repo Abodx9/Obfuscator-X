@@ -19,4 +19,30 @@ public class Tricks {
 
         return sb.toString();
     }
+
+
+    //  Method to encode the Java Strings using array
+    public static String encode_Ja(String code) {
+        StringBuffer sb = new StringBuffer();
+        int len = code.length();
+        sb.append("String x = \"\";").append("int AsjbyrfXhcAxGJsdwgZxJA[] = {");
+        for (int i = 0; i < code.length(); i++) {
+            int decpo = code.codePointAt(i);
+            int trick =decpo + i + 1;
+            if (decpo > 0xffff) {
+                i++;
+            }
+            String hex = Integer.toHexString(trick);
+            sb.append("0x");
+            for (int j = 0; j < hex.length(); j++) {
+                sb.append("0");
+            }
+            sb.append(hex).append(", ");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length()-1);
+        sb.append("};");
+        sb.append("for (int AsjbhcAxdwgZxJA = 0, AsjbyrfXhcAxdwgZxJA = 0; AsjbhcAxdwgZxJA < "+Integer.valueOf(len)+ " ;AsjbhcAxdwgZxJA++){AsjbyrfXhcAxdwgZxJA = AsjbyrfXhcAxGJsdwgZxJA[AsjbhcAxdwgZxJA];AsjbyrfXhcAxdwgZxJA --;AsjbyrfXhcAxdwgZxJA -= AsjbhcAxdwgZxJA;x = x + (char)(AsjbyrfXhcAxdwgZxJA & 0xFFFF);}");
+        return sb.toString();
+    }
 }
