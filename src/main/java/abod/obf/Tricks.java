@@ -45,4 +45,25 @@ public class Tricks {
         sb.append("for (int AsjbhcAxdwgZxJA = 0, AsjbyrfXhcAxdwgZxJA = 0; AsjbhcAxdwgZxJA < "+Integer.valueOf(len)+ " ;AsjbhcAxdwgZxJA++){AsjbyrfXhcAxdwgZxJA = AsjbyrfXhcAxGJsdwgZxJA[AsjbhcAxdwgZxJA];AsjbyrfXhcAxdwgZxJA --;AsjbyrfXhcAxdwgZxJA -= AsjbhcAxdwgZxJA;x = x + (char)(AsjbyrfXhcAxdwgZxJA & 0xFFFF);}");
         return sb.toString();
     }
+
+
+    //  A method to encode a JS string with Unicode escapes and position-based shifts
+    public static String encode_Js(String code) {
+        StringBuffer sb = new StringBuffer();
+        int len = code.length();
+        sb.append("var x = \"");
+        for (int i = 0; i < code.length(); i++) {
+            int decpo = code.codePointAt(i);
+            int trick =decpo + i + 1;
+            String hex = Integer.toHexString(trick);
+            sb.append("\\u");
+            for (int j = 0; j < hex.length(); j++) {
+                sb.append("0");
+            }
+            sb.append(hex);
+        }
+        sb.append("\";");
+        sb.append("for (var XcbjbyrfBDcxsdwgZxJA = 0, XcbjbyrfBDcxsdxwgZxJA = 0; XcbjbyrfBDcxsdwgZxJA < "+Integer.valueOf(len)+ ";XcbjbyrfBDcxsdwgZxJA++){XcbjbyrfBDcxsdxwgZxJA = x.charCodeAt(XcbjbyrfBDcxsdwgZxJA);XcbjbyrfBDcxsdxwgZxJA --;XcbjbyrfBDcxsdxwgZxJA -=XcbjbyrfBDcxsdwgZxJA;x = x.substr(0, XcbjbyrfBDcxsdwgZxJA) + String.fromCharCode(XcbjbyrfBDcxsdxwgZxJA & 0xFFFF) + x.substr(XcbjbyrfBDcxsdwgZxJA + 1);}");
+        return sb.toString();
+    }
 }
