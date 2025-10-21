@@ -23,4 +23,10 @@ public class ObfuscatorController {
   public String obfJa(@RequestBody String input) {
     return Tricks.encode_Ja(input);
   }
+
+
+  @GetMapping("/encode-js")
+  public String obfJs(@RequestBody String input) {
+    return Tricks.encode_Js(input);
+  }
 }
