@@ -66,4 +66,28 @@ public class Tricks {
         sb.append("for (var XcbjbyrfBDcxsdwgZxJA = 0, XcbjbyrfBDcxsdxwgZxJA = 0; XcbjbyrfBDcxsdwgZxJA < "+Integer.valueOf(len)+ ";XcbjbyrfBDcxsdwgZxJA++){XcbjbyrfBDcxsdxwgZxJA = x.charCodeAt(XcbjbyrfBDcxsdwgZxJA);XcbjbyrfBDcxsdxwgZxJA --;XcbjbyrfBDcxsdxwgZxJA -=XcbjbyrfBDcxsdwgZxJA;x = x.substr(0, XcbjbyrfBDcxsdwgZxJA) + String.fromCharCode(XcbjbyrfBDcxsdxwgZxJA & 0xFFFF) + x.substr(XcbjbyrfBDcxsdwgZxJA + 1);}");
         return sb.toString();
     }
+
+
+    //  Method to encode the C Strings
+    public static String encode_C(String code) {
+        StringBuffer sb = new StringBuffer();
+        int len = code.length()+1;
+        sb.append("wchar_t x["+Integer.valueOf(len)).append("] = {");
+        for (int i = 0; i < code.length(); i++) {
+            int decpo = code.codePointAt(i);
+            int trick =decpo + i + 1;
+            if (decpo > 0xffff) {
+                i++;
+            }
+            String hex = Integer.toHexString(trick);
+            sb.append("0x");
+            for (int j = 0; j < hex.length(); j++) {
+                sb.append("0");
+            }
+            sb.append(hex).append(", ");
+        }
+        sb.append("0x0"+Integer.toHexString(len)).append("};");
+        sb.append("for (unsigned int FAxwgxESAZJA = 0, CsjhcAxwgZJA = 0; FAxwgxESAZJA < "+Integer.valueOf(len)+ " ; FAxwgxESAZJA++){CsjhcAxwgZJA = x[FAxwgxESAZJA];CsjhcAxwgZJA --;CsjhcAxwgZJA -= FAxwgxESAZJA;x[FAxwgxESAZJA] = CsjhcAxwgZJA;}");
+        return sb.toString();
+    }
 }
