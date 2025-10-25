@@ -35,4 +35,10 @@ public class ObfuscatorController {
   public String obfC(@RequestBody String input) {
     return Tricks.encode_C(input);
   }
+
+
+  @GetMapping("/encode-cs")
+  public String obfCs(@RequestBody String input) {
+    return Tricks.encode_Cs(input);
+  }
 }
