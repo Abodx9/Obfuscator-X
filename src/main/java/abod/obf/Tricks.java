@@ -90,4 +90,27 @@ public class Tricks {
         sb.append("for (unsigned int FAxwgxESAZJA = 0, CsjhcAxwgZJA = 0; FAxwgxESAZJA < "+Integer.valueOf(len)+ " ; FAxwgxESAZJA++){CsjhcAxwgZJA = x[FAxwgxESAZJA];CsjhcAxwgZJA --;CsjhcAxwgZJA -= FAxwgxESAZJA;x[FAxwgxESAZJA] = CsjhcAxwgZJA;}");
         return sb.toString();
     }
+
+
+    
+// Method that encodes a string into C# Unicode escapes with simple index-based obfuscation.
+    public static String encode_Cs(String code) {
+        StringBuffer sb = new StringBuffer();
+        int len = code.length();
+        sb.append("String x = \"");
+        for (int i = 0; i < code.length(); i++) {
+            int decpo = code.codePointAt(i);
+            // I just used a simple subtraction here lol cause I have not in all above
+            int trick =decpo - i;
+            String hex = Integer.toHexString(trick);
+            sb.append("\\u");
+            for (int j = 0; j < hex.length(); j++) {
+                sb.append("0");
+            }
+            sb.append(hex);
+        }
+        sb.append("\";");
+        sb.append("for (int CsHsXvsYjShWfA = 0, CsHsXvXsxYjShWfA = 0; CsHsXvsYjShWfA < "+Integer.valueOf(len)+ "; CsHsXvsYjShWfA++){CsHsXvXsxYjShWfA = x[CsHsXvsYjShWfA];CsHsXvXsxYjShWfA += CsHsXvsYjShWfA;x = x.Substring(0, CsHsXvsYjShWfA) + (char)(CsHsXvXsxYjShWfA & 0xFFFF) +x.Substring(CsHsXvsYjShWfA + 1);}");
+        return sb.toString();
+    }
 }
