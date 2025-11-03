@@ -41,4 +41,10 @@ public class ObfuscatorController {
   public String obfCs(@RequestBody String input) {
     return Tricks.encode_Cs(input);
   }
+
+
+  @GetMapping("/encode-ru")
+  public String obfRu(@RequestBody String input) {
+	return Tricks.encode_Ru(input);
+  }	
 }

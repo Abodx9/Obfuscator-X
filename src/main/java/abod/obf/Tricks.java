@@ -122,7 +122,7 @@ public class Tricks {
         StringBuffer sb = new StringBuffer();
         int len = code.length();
         sb.append("x = \"");
-        for (int i = 0; i < code.length(); i++) {
+        for (int i = 0; i < len ; i++) {
             int decpo = code.codePointAt(i);
             int trick =decpo;
             // I need to get rid of the hex string cause Ruby cannot handle 8 bits.
