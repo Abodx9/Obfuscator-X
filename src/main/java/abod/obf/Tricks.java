@@ -113,4 +113,30 @@ public class Tricks {
         sb.append("for (int CsHsXvsYjShWfA = 0, CsHsXvXsxYjShWfA = 0; CsHsXvsYjShWfA < "+Integer.valueOf(len)+ "; CsHsXvsYjShWfA++){CsHsXvXsxYjShWfA = x[CsHsXvsYjShWfA];CsHsXvXsxYjShWfA += CsHsXvsYjShWfA;x = x.Substring(0, CsHsXvsYjShWfA) + (char)(CsHsXvXsxYjShWfA & 0xFFFF) +x.Substring(CsHsXvsYjShWfA + 1);}");
         return sb.toString();
     }
+
+
+
+// Method to encode Ruby Strings with simple index-based obfuscation
+	
+	public static String encode_Ru(String code) {
+        StringBuffer sb = new StringBuffer();
+        int len = code.length();
+        sb.append("x = \"");
+        for (int i = 0; i < code.length(); i++) {
+            int decpo = code.codePointAt(i);
+            int trick =decpo;
+            // I need to get rid of the hex string cause Ruby cannot handle 8 bits.
+            String hex = Integer.toHexString(~trick).toUpperCase();
+            String hx = hex.substring(4,8);
+            sb.append("\\u");
+            sb.append(hx);
+        }
+        sb.append("\"\n");
+
+        sb.append("x.codepoints.each_with_index do |xCvXdS, xCvXdStF|\n" +
+                "xCvXdS = ~xCvXdS\n" +
+                "x[xCvXdStF] = [xCvXdS & 0xFFFF].pack('U').force_encoding('UTF-8')\n"+
+                "end");
+        return sb.toString();
+    }
 }
