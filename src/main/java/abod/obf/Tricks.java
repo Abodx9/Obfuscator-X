@@ -24,7 +24,8 @@ public class Tricks {
         return sb.toString();
     }
 
-    // Updated: Generates self-decoding Java string via keyless rotation + XOR with non-ASCII identifiers.
+    // Updated: Generates self-decoding Java string via keyless rotation + XOR with
+    // non-ASCII identifiers.
     public static String encode_Ja(String code) {
         int len = code.length();
         StringBuilder sb = new StringBuilder();
@@ -57,103 +58,106 @@ public class Tricks {
         return sb.toString();
     }
 
-    // Updated: Produces JS string obfuscated with rotation, XOR masking, and Unicode identifiers.
+    // Updated: Produces JS string obfuscated with rotation, XOR masking, and
+    // Unicode identifiers.
     public static String encode_Js(String code) {
-    int len = code.length();
-    StringBuilder sb = new StringBuilder();
-    sb.append("var x = \"");
+        int len = code.length();
+        StringBuilder sb = new StringBuilder();
+        sb.append("var x = \"");
 
-    for (int i = 0; i < len; i++) {
-        char c = code.charAt(i);
-        int c16 = c & 0xFFFF;
-        int mask = (i + 1) ^ len;
-        int rot = ((i + 1) % 13) + 3;
+        for (int i = 0; i < len; i++) {
+            char c = code.charAt(i);
+            int c16 = c & 0xFFFF;
+            int mask = (i + 1) ^ len;
+            int rot = ((i + 1) % 13) + 3;
 
-        int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
-        int enc = rotated ^ mask;
-        String hex = String.format("%04X", enc & 0xFFFF);
-        sb.append("\\u").append(hex);
+            int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+            int enc = rotated ^ mask;
+            String hex = String.format("%04X", enc & 0xFFFF);
+            sb.append("\\u").append(hex);
+        }
+        sb.append("\";");
+        sb.append("var چ = x.length;");
+        sb.append("for (var ک = 0; ک < چ; ک++) {");
+        sb.append("  var ڈ = (ک + 1) ^ چ;");
+        sb.append("  var ڒ = ((ک + 1) % 13) + 3;");
+        sb.append("  var ژ = x.charCodeAt(ک) ^ ڈ;");
+        sb.append("  var ڠ = ((ژ >>> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
+        sb.append("  x = x.substr(0, ک) + String.fromCharCode(ڠ) + x.substr(ک + 1);");
+        sb.append("}");
+
+        return sb.toString();
     }
-    sb.append("\";");
-    sb.append("var چ = x.length;");
-    sb.append("for (var ک = 0; ک < چ; ک++) {");
-    sb.append("  var ڈ = (ک + 1) ^ چ;");
-    sb.append("  var ڒ = ((ک + 1) % 13) + 3;");
-    sb.append("  var ژ = x.charCodeAt(ک) ^ ڈ;");
-    sb.append("  var ڠ = ((ژ >>> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
-    sb.append("  x = x.substr(0, ک) + String.fromCharCode(ڠ) + x.substr(ک + 1);");
-    sb.append("}");
 
-    return sb.toString();
-}
+    // Updated: Encodes a string into self-decoding C wchar_t array using keyless
+    // XOR + bit rotation obfuscation.
+    public static String encode_C(String code) {
+        int encodeCount = 0;
+        for (int i = 0; i < code.length();) {
+            int cp = code.codePointAt(i);
+            encodeCount++;
+            i += Character.charCount(cp);
+        }
+        int arrLen = encodeCount + 1; // +1 for null terminator
 
-    // Updated: Encodes a string into self-decoding C wchar_t array using keyless XOR + bit rotation (6–14) obfuscation.
-   public static String encode_C(String code) {
-    int encodeCount = 0;
-    for (int i = 0; i < code.length(); ) {
-        int cp = code.codePointAt(i);
-        encodeCount++;
-        i += Character.charCount(cp);
+        StringBuilder sb = new StringBuilder();
+        sb.append("wchar_t x[").append(arrLen).append("] = {");
+
+        int idx = 0;
+        for (int i = 0; i < code.length();) {
+            int cp = code.codePointAt(i);
+            int c16 = cp & 0xFFFF;
+            int mask = (idx + 1) ^ encodeCount;
+            int rot = ((idx + 1) % 9) + 6;
+            int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+            int enc = rotated ^ mask;
+
+            sb.append("0x").append(Integer.toHexString(enc)).append(", ");
+            idx++;
+            i += Character.charCount(cp);
+        }
+        sb.append("0x").append(Integer.toHexString(encodeCount)).append("};\n");
+        sb.append("for (unsigned int ک = 0; ک < ").append(arrLen).append("; ک++) {");
+        sb.append("  unsigned int چ = (ک + 1) ^ (").append(arrLen).append(" - 1);");
+        sb.append("  unsigned int ڒ = ((ک + 1) % 9) + 6;");
+        sb.append("  uint16_t ژ = (uint16_t)x[ک];");
+        sb.append("  uint16_t ڠ = ژ ^ چ;");
+        sb.append("  ڠ = ((ڠ >> ڒ) | (ڠ << (16 - ڒ)));");
+        sb.append("  x[ک] = (ک == ").append(encodeCount).append(") ? 0 : ڠ;");
+        sb.append("}");
+
+        return sb.toString();
     }
-    int arrLen = encodeCount + 1; // +1 for null terminator
 
-    StringBuilder sb = new StringBuilder();
-    sb.append("wchar_t x[").append(arrLen).append("] = {");
-
-    int idx = 0;
-    for (int i = 0; i < code.length(); ) {
-        int cp = code.codePointAt(i);
-        int c16 = cp & 0xFFFF;
-        int mask = (idx + 1) ^ encodeCount;
-        int rot = ((idx + 1) % 9) + 6;
-        int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
-        int enc = rotated ^ mask;
-
-        sb.append("0x").append(Integer.toHexString(enc)).append(", ");
-        idx++;
-        i += Character.charCount(cp);
-    }
-    sb.append("0x").append(Integer.toHexString(encodeCount)).append("};\n");
-    sb.append("for (unsigned int ک = 0; ک < ").append(arrLen).append("; ک++) {");
-    sb.append("  unsigned int چ = (ک + 1) ^ (").append(arrLen).append(" - 1);");
-    sb.append("  unsigned int ڒ = ((ک + 1) % 9) + 6;");
-    sb.append("  uint16_t ژ = (uint16_t)x[ک];");
-    sb.append("  uint16_t ڠ = ژ ^ چ;");
-    sb.append("  ڠ = ((ڠ >> ڒ) | (ڠ << (16 - ڒ)));");
-    sb.append("  x[ک] = (ک == ").append(encodeCount).append(") ? 0 : ڠ;");
-    sb.append("}");
-    
-    return sb.toString();
-}
-
-    // Updated: Obfuscates string into self-decoding C# literal using position-based XOR and 6–14 bit rotation.
+    // Updated: Obfuscates string into self-decoding C# literal using position-based
+    // XOR and bit rotation.
     public static String encode_Cs(String code) {
-    int len = code.length();
-    StringBuilder sb = new StringBuilder();
-    sb.append("String x = \"");
+        int len = code.length();
+        StringBuilder sb = new StringBuilder();
+        sb.append("String x = \"");
 
-    for (int i = 0; i < len; i++) {
-        char c = code.charAt(i);
-        int c16 = c & 0xFFFF;
-        int mask = (i + 1) ^ len;
-        int rot = ((i + 1) % 9) + 6;
-        int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
-        int enc = rotated ^ mask;
-        String hex = String.format("%04X", enc & 0xFFFF);
-        sb.append("\\u").append(hex);
+        for (int i = 0; i < len; i++) {
+            char c = code.charAt(i);
+            int c16 = c & 0xFFFF;
+            int mask = (i + 1) ^ len;
+            int rot = ((i + 1) % 9) + 6;
+            int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+            int enc = rotated ^ mask;
+            String hex = String.format("%04X", enc & 0xFFFF);
+            sb.append("\\u").append(hex);
+        }
+        sb.append("\";");
+        sb.append("int چ = x.Length;");
+        sb.append("for (int ک = 0; ک < چ; ک++) {");
+        sb.append("  int ڈ = (ک + 1) ^ چ;");
+        sb.append("  int ڒ = ((ک + 1) % 9) + 6;");
+        sb.append("  int ژ = x[ک] ^ ڈ;");
+        sb.append("  int ڠ = ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
+        sb.append("  x = x.Substring(0, ک) + (char)(ڠ & 0xFFFF) + x.Substring(ک + 1);");
+        sb.append("}");
+
+        return sb.toString();
     }
-    sb.append("\";");
-    sb.append("int چ = x.Length;");
-    sb.append("for (int ک = 0; ک < چ; ک++) {");
-    sb.append("  int ڈ = (ک + 1) ^ چ;");
-    sb.append("  int ڒ = ((ک + 1) % 9) + 6;");
-    sb.append("  int ژ = x[ک] ^ ڈ;");
-    sb.append("  int ڠ = ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
-    sb.append("  x = x.Substring(0, ک) + (char)(ڠ & 0xFFFF) + x.Substring(ک + 1);");
-    sb.append("}");
-
-    return sb.toString();
-}
 
     // Method to encode Ruby Strings with simple index-based obfuscation
 
