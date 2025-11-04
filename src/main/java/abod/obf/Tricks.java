@@ -114,25 +114,32 @@ public class Tricks {
     // Method that encodes a string into C# Unicode escapes with simple index-based
     // obfuscation.
     public static String encode_Cs(String code) {
-        StringBuffer sb = new StringBuffer();
-        int len = code.length();
-        sb.append("String x = \"");
-        for (int i = 0; i < code.length(); i++) {
-            int decpo = code.codePointAt(i);
-            // I just used a simple subtraction here lol cause I have not in all above
-            int trick = decpo - i;
-            String hex = Integer.toHexString(trick);
-            sb.append("\\u");
-            for (int j = 0; j < hex.length(); j++) {
-                sb.append("0");
-            }
-            sb.append(hex);
-        }
-        sb.append("\";");
-        sb.append("for (int CsHsXvsYjShWfA = 0, CsHsXvXsxYjShWfA = 0; CsHsXvsYjShWfA < " + Integer.valueOf(len)
-                + "; CsHsXvsYjShWfA++){CsHsXvXsxYjShWfA = x[CsHsXvsYjShWfA];CsHsXvXsxYjShWfA += CsHsXvsYjShWfA;x = x.Substring(0, CsHsXvsYjShWfA) + (char)(CsHsXvXsxYjShWfA & 0xFFFF) +x.Substring(CsHsXvsYjShWfA + 1);}");
-        return sb.toString();
+    int len = code.length();
+    StringBuilder sb = new StringBuilder();
+    sb.append("String x = \"");
+
+    for (int i = 0; i < len; i++) {
+        char c = code.charAt(i);
+        int c16 = c & 0xFFFF;
+        int mask = (i + 1) ^ len;
+        int rot = ((i + 1) % 9) + 6;
+        int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+        int enc = rotated ^ mask;
+        String hex = String.format("%04X", enc & 0xFFFF);
+        sb.append("\\u").append(hex);
     }
+    sb.append("\";");
+    sb.append("int چ = x.Length;");
+    sb.append("for (int ک = 0; ک < چ; ک++) {");
+    sb.append("  int ڈ = (ک + 1) ^ چ;");
+    sb.append("  int ڒ = ((ک + 1) % 9) + 6;");
+    sb.append("  int ژ = x[ک] ^ ڈ;");
+    sb.append("  int ڠ = ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
+    sb.append("  x = x.Substring(0, ک) + (char)(ڠ & 0xFFFF) + x.Substring(ک + 1);");
+    sb.append("}");
+
+    return sb.toString();
+}
 
     // Method to encode Ruby Strings with simple index-based obfuscation
 
