@@ -24,7 +24,7 @@ public class Tricks {
         return sb.toString();
     }
 
-    // Method to encode the Java Strings using array
+    // Updated: Generates self-decoding Java string via keyless rotation + XOR with non-ASCII identifiers.
     public static String encode_Ja(String code) {
         int len = code.length();
         StringBuilder sb = new StringBuilder();
@@ -57,7 +57,7 @@ public class Tricks {
         return sb.toString();
     }
 
-    // A method to encode a JS string with Unicode escapes and position-based shifts
+    // Updated: Produces JS string obfuscated with rotation, XOR masking, and Unicode identifiers.
     public static String encode_Js(String code) {
     int len = code.length();
     StringBuilder sb = new StringBuilder();
@@ -87,32 +87,46 @@ public class Tricks {
     return sb.toString();
 }
 
-    // Method to encode the C Strings
-    public static String encode_C(String code) {
-        StringBuffer sb = new StringBuffer();
-        int len = code.length() + 1;
-        sb.append("wchar_t x[" + Integer.valueOf(len)).append("] = {");
-        for (int i = 0; i < code.length(); i++) {
-            int decpo = code.codePointAt(i);
-            int trick = decpo + i + 1;
-            if (decpo > 0xffff) {
-                i++;
-            }
-            String hex = Integer.toHexString(trick);
-            sb.append("0x");
-            for (int j = 0; j < hex.length(); j++) {
-                sb.append("0");
-            }
-            sb.append(hex).append(", ");
-        }
-        sb.append("0x0" + Integer.toHexString(len)).append("};");
-        sb.append("for (unsigned int FAxwgxESAZJA = 0, CsjhcAxwgZJA = 0; FAxwgxESAZJA < " + Integer.valueOf(len)
-                + " ; FAxwgxESAZJA++){CsjhcAxwgZJA = x[FAxwgxESAZJA];CsjhcAxwgZJA --;CsjhcAxwgZJA -= FAxwgxESAZJA;x[FAxwgxESAZJA] = CsjhcAxwgZJA;}");
-        return sb.toString();
+    // Updated: Encodes a string into self-decoding C wchar_t array using keyless XOR + bit rotation (6–14) obfuscation.
+   public static String encode_C(String code) {
+    int encodeCount = 0;
+    for (int i = 0; i < code.length(); ) {
+        int cp = code.codePointAt(i);
+        encodeCount++;
+        i += Character.charCount(cp);
     }
+    int arrLen = encodeCount + 1; // +1 for null terminator
 
-    // Method that encodes a string into C# Unicode escapes with simple index-based
-    // obfuscation.
+    StringBuilder sb = new StringBuilder();
+    sb.append("wchar_t x[").append(arrLen).append("] = {");
+
+    int idx = 0;
+    for (int i = 0; i < code.length(); ) {
+        int cp = code.codePointAt(i);
+        int c16 = cp & 0xFFFF;
+        int mask = (idx + 1) ^ encodeCount;
+        int rot = ((idx + 1) % 9) + 6;
+        int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+        int enc = rotated ^ mask;
+
+        sb.append("0x").append(Integer.toHexString(enc)).append(", ");
+        idx++;
+        i += Character.charCount(cp);
+    }
+    sb.append("0x").append(Integer.toHexString(encodeCount)).append("};\n");
+    sb.append("for (unsigned int ک = 0; ک < ").append(arrLen).append("; ک++) {");
+    sb.append("  unsigned int چ = (ک + 1) ^ (").append(arrLen).append(" - 1);");
+    sb.append("  unsigned int ڒ = ((ک + 1) % 9) + 6;");
+    sb.append("  uint16_t ژ = (uint16_t)x[ک];");
+    sb.append("  uint16_t ڠ = ژ ^ چ;");
+    sb.append("  ڠ = ((ڠ >> ڒ) | (ڠ << (16 - ڒ)));");
+    sb.append("  x[ک] = (ک == ").append(encodeCount).append(") ? 0 : ڠ;");
+    sb.append("}");
+    
+    return sb.toString();
+}
+
+    // Updated: Obfuscates string into self-decoding C# literal using position-based XOR and 6–14 bit rotation.
     public static String encode_Cs(String code) {
     int len = code.length();
     StringBuilder sb = new StringBuilder();
