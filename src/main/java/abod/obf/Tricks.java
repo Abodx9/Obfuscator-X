@@ -59,25 +59,33 @@ public class Tricks {
 
     // A method to encode a JS string with Unicode escapes and position-based shifts
     public static String encode_Js(String code) {
-        StringBuffer sb = new StringBuffer();
-        int len = code.length();
-        sb.append("var x = \"");
-        for (int i = 0; i < code.length(); i++) {
-            int decpo = code.codePointAt(i);
-            int trick = decpo + i + 1;
-            String hex = Integer.toHexString(trick);
-            sb.append("\\u");
-            for (int j = 0; j < hex.length(); j++) {
-                sb.append("0");
-            }
-            sb.append(hex);
-        }
-        sb.append("\";");
-        sb.append("for (var XcbjbyrfBDcxsdwgZxJA = 0, XcbjbyrfBDcxsdxwgZxJA = 0; XcbjbyrfBDcxsdwgZxJA < "
-                + Integer.valueOf(len)
-                + ";XcbjbyrfBDcxsdwgZxJA++){XcbjbyrfBDcxsdxwgZxJA = x.charCodeAt(XcbjbyrfBDcxsdwgZxJA);XcbjbyrfBDcxsdxwgZxJA --;XcbjbyrfBDcxsdxwgZxJA -=XcbjbyrfBDcxsdwgZxJA;x = x.substr(0, XcbjbyrfBDcxsdwgZxJA) + String.fromCharCode(XcbjbyrfBDcxsdxwgZxJA & 0xFFFF) + x.substr(XcbjbyrfBDcxsdwgZxJA + 1);}");
-        return sb.toString();
+    int len = code.length();
+    StringBuilder sb = new StringBuilder();
+    sb.append("var x = \"");
+
+    for (int i = 0; i < len; i++) {
+        char c = code.charAt(i);
+        int c16 = c & 0xFFFF;
+        int mask = (i + 1) ^ len;
+        int rot = ((i + 1) % 13) + 3;
+
+        int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+        int enc = rotated ^ mask;
+        String hex = String.format("%04X", enc & 0xFFFF);
+        sb.append("\\u").append(hex);
     }
+    sb.append("\";");
+    sb.append("var چ = x.length;");
+    sb.append("for (var ک = 0; ک < چ; ک++) {");
+    sb.append("  var ڈ = (ک + 1) ^ چ;");
+    sb.append("  var ڒ = ((ک + 1) % 13) + 3;");
+    sb.append("  var ژ = x.charCodeAt(ک) ^ ڈ;");
+    sb.append("  var ڠ = ((ژ >>> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
+    sb.append("  x = x.substr(0, ک) + String.fromCharCode(ڠ) + x.substr(ک + 1);");
+    sb.append("}");
+
+    return sb.toString();
+}
 
     // Method to encode the C Strings
     public static String encode_C(String code) {
