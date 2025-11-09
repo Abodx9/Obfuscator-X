@@ -159,27 +159,56 @@ public class Tricks {
         return sb.toString();
     }
 
-    // Method to encode Ruby Strings with simple index-based obfuscation
-
+    // Obfuscates string into self-decoding Ruby using keyless rotation (6–14), XOR
+    // masking, and Unicode identifiers.
     public static String encode_Ru(String code) {
-        StringBuffer sb = new StringBuffer();
-        int len = code.length();
-        sb.append("x = \"");
-        for (int i = 0; i < len; i++) {
-            int decpo = code.codePointAt(i);
-            int trick = decpo;
-            // I need to get rid of the hex string cause Ruby cannot handle 8 bits.
-            String hex = Integer.toHexString(~trick).toUpperCase();
-            String hx = hex.substring(4, 8);
-            sb.append("\\u");
-            sb.append(hx);
+        if (code == null || code.isEmpty()) {
+            return "x = \"\"";
         }
-        sb.append("\"\n");
 
-        sb.append("x.codepoints.each_with_index do |xCvXdS, xCvXdStF|\n" +
-                "xCvXdS = ~xCvXdS\n" +
-                "x[xCvXdStF] = [xCvXdS & 0xFFFF].pack('U').force_encoding('UTF-8')\n" +
-                "end");
+        // Validate: no surrogates, no non-BMP
+        for (int i = 0; i < code.length();) {
+            int cp = code.codePointAt(i);
+            if (cp > 0xFFFF || (cp >= 0xD800 && cp <= 0xDFFF)) {
+                throw new IllegalArgumentException("Ruby encoder requires BMP-only (no surrogates/emojis): U+"
+                        + Integer.toHexString(cp).toUpperCase());
+            }
+            i += Character.charCount(cp);
+        }
+
+        int len = code.length();
+        StringBuilder sb = new StringBuilder();
+        sb.append("x = \"");
+
+        for (int i = 0; i < len; i++) {
+            char c = code.charAt(i);
+            int c16 = c & 0xFFFF;
+            int mask = (i + 1) ^ len;
+            int rot = ((i + 1) % 9) + 6;
+
+            int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+            int enc = rotated ^ mask;
+
+            // Ensure enc is NOT in surrogate range [0xD800, 0xDFFF]
+            if (enc >= 0xD800 && enc <= 0xDFFF) {
+                // Shift out of surrogate range (e.g., wrap or offset)
+                enc = 0xE000 + ((enc - 0xD800) % 0x1000);
+            }
+
+            sb.append("\\u").append(String.format("%04X", enc & 0xFFFF));
+        }
+        sb.append("\";\n");
+
+        sb.append("چ = x.length\n");
+        sb.append("x = x.codepoints.map.with_index { |ﮬ, ک|\n");
+        sb.append("  ڈ = (ک + 1) ^ چ\n");
+        sb.append("  ڒ = ((ک + 1) % 9) + 6\n");
+        sb.append("  ژ = ﮬ ^ ڈ\n");
+        sb.append("  val = ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF\n");
+        sb.append("  val\n");
+        sb.append("}.pack('U*').force_encoding('UTF-8')");
+
         return sb.toString();
     }
+
 }
