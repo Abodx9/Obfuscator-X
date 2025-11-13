@@ -236,4 +236,34 @@ public class Tricks {
 
         return sb.toString();
     }
+
+
+    // Simple Dart encoder using position-based subtraction
+
+    public static String encode_Da(String code) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("var x = '';");
+    sb.append("var arr = [");
+
+    for (int i = 0; i < code.length(); i++) {
+        int decpo = code.codePointAt(i);
+        int trick = decpo + (i - 4);
+        if (decpo > 0xffff) {
+            i++;
+        }
+        sb.append(String.format("0x%X, ", trick));
+    }
+
+    sb.setLength(sb.length() - 2);
+    sb.append("];");
+
+    sb.append("for (var i = 0; i < arr.length; i++) {");
+    sb.append("var v = arr[i];");
+    sb.append("v -= i - 4;");
+    sb.append("x += String.fromCharCode(v);");
+    sb.append("}");
+
+    return sb.toString();
+}
+
 }
