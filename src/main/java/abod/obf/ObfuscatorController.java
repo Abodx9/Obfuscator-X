@@ -46,5 +46,11 @@ public class ObfuscatorController {
   @GetMapping("/encode-ru")
   public String obfRu(@RequestBody String input) {
 	return Tricks.encode_Ru(input);
+  }
+
+
+ @GetMapping("/encode-go")
+  public String obfGo(@RequestBody String input) {
+	return Tricks.encode_Go(input);
   }	
 }
