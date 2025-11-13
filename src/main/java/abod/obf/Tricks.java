@@ -211,4 +211,29 @@ public class Tricks {
         return sb.toString();
     }
 
+    // Simple Go encoder using position-based addition
+
+    public static String encode_Go(String code) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("var x string;");
+        sb.append("arr := []int{");
+
+        for (int i = 0; i < code.length(); i++) {
+            int decpo = code.codePointAt(i);
+            int trick = decpo + (i * 2);
+            if (decpo > 0xffff) {
+                i++;
+            }
+            sb.append(String.format("0x%X, ", trick));
+        }
+        sb.setLength(sb.length() - 2);
+        sb.append("};");
+
+        sb.append("for i, v := range arr {");
+        sb.append("v -= i * 2;");
+        sb.append("x += string(rune(v));");
+        sb.append("}");
+
+        return sb.toString();
+    }
 }
