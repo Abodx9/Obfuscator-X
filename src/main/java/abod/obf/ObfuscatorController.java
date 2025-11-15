@@ -59,4 +59,10 @@ public class ObfuscatorController {
   public String obfDa(@RequestBody String input) {
   return Tricks.encode_Da(input);
   }
+
+
+  @GetMapping("/encode-cpp")
+  public String obfCpp(@RequestBody String input) {
+    return Tricks.encode_Cpp(input);
+  }
 }
