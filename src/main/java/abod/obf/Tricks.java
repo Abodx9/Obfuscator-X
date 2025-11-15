@@ -237,33 +237,76 @@ public class Tricks {
         return sb.toString();
     }
 
-
     // Simple Dart encoder using position-based subtraction
 
     public static String encode_Da(String code) {
-    StringBuilder sb = new StringBuilder();
-    sb.append("var x = '';");
-    sb.append("var arr = [");
+        StringBuilder sb = new StringBuilder();
+        sb.append("var x = '';");
+        sb.append("var arr = [");
 
-    for (int i = 0; i < code.length(); i++) {
-        int decpo = code.codePointAt(i);
-        int trick = decpo + (i - 4);
-        if (decpo > 0xffff) {
-            i++;
+        for (int i = 0; i < code.length(); i++) {
+            int decpo = code.codePointAt(i);
+            int trick = decpo + (i - 4);
+            if (decpo > 0xffff) {
+                i++;
+            }
+            sb.append(String.format("0x%X, ", trick));
         }
-        sb.append(String.format("0x%X, ", trick));
+
+        sb.setLength(sb.length() - 2);
+        sb.append("];");
+
+        sb.append("for (var i = 0; i < arr.length; i++) {");
+        sb.append("var v = arr[i];");
+        sb.append("v -= i - 4;");
+        sb.append("x += String.fromCharCode(v);");
+        sb.append("}");
+
+        return sb.toString();
     }
 
-    sb.setLength(sb.length() - 2);
-    sb.append("];");
+    // Obfuscates string into self-decoding C++ using C++-unique rotation
+    // ((i+1)*5%12+4), XOR masking.
 
-    sb.append("for (var i = 0; i < arr.length; i++) {");
-    sb.append("var v = arr[i];");
-    sb.append("v -= i - 4;");
-    sb.append("x += String.fromCharCode(v);");
-    sb.append("}");
+    // Thannks to Qwen Ai for helping with this one!, cause I hate C++ :)
+    public static String encode_Cpp(String code) {
+        if (code == null || code.isEmpty()) {
+            return "std::string x;";
+        }
 
-    return sb.toString();
-}
+        int len = code.length();
+        StringBuilder sb = new StringBuilder();
+//        sb.append("#include <string>\n");   Only import when decoding
+//        sb.append("#include <cstdint>\n");
+        sb.append("std::string _x;\n");
+        sb.append("const uint16_t _a[]={");
+
+        // Encode each char (BMP assumed)
+        for (int i = 0; i < len; i++) {
+            char c = code.charAt(i);
+            int c16 = c & 0xFFFF;
+            int mask = (i + 1) ^ len;
+            int rot = ((i + 1) * 5) % 12 + 4;
+
+            int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+            int enc = rotated ^ mask;
+
+            sb.append("0x").append(String.format("%X", enc)).append(",");
+        }
+        sb.setLength(sb.length() - 1);
+        sb.append("};\n");
+
+        sb.append("for(size_t _i=0;_i<sizeof(_a)/sizeof(_a[0]);++_i){\n");
+        sb.append("  uint16_t _m=static_cast<uint16_t>((_i+1)^(")
+                .append(len)
+                .append("));\n");
+        sb.append("  uint16_t _r=static_cast<uint16_t>(((_i+1)*5)%12+4);\n");
+        sb.append("  uint16_t _v=_a[_i]^_m;\n");
+        sb.append("  _v=static_cast<uint16_t>(((_v>>_r)|(_v<<(16-_r)))&0xFFFF);\n");
+        sb.append("  _x+=static_cast<char>(_v);\n");
+        sb.append("}");
+
+        return sb.toString();
+    }
 
 }
