@@ -7,10 +7,11 @@
     <script>
          async function Obfuscatex() {
             const inputText = document.getElementById('inputText').value;
-            const response = await fetch('/encode-py', {
+            const lang_endp = document.getElementById('ChosenProg').value;
+            const response = await fetch(lang_endp, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(inputText)
+                body: inputText
             });
 
             if (response.ok) {
@@ -24,6 +25,19 @@
 </head>
 <body>
     <h2>Obfuscator X</h2>
+    <label for="ChosenProg">Language:</label><br>
+    <select id="ChosenProg">
+        <option value="/encode-py">Python</option>
+        <option value="/encode-ja">Java</option>
+        <option value="/encode-js">JavaScript</option>
+        <option value="/encode-c">C</option>
+        <option value="/encode-cs">C#</option>
+        <option value="/encode-ru">Rust</option>
+        <option value="/encode-go">Go</option>
+        <option value="/encode-da">Dart</option>
+        <option value="/encode-cpp">C++</option>
+    </select>
+    <br><br>
     <label for="inputText">String:</label><br>
     <textarea id="inputText" rows="5" cols="50"></textarea><br><br>
 
