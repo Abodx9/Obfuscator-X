@@ -16,8 +16,6 @@ Obfuscator-X is a tool for encoding and obfuscating strings across different pro
 
 - **User-Friendly Interface**: Clean, modern design with gradient background and glass-morphism effects
 - **Easy Clipboard Integration**: One-click paste and copy functionality
-- **Responsive Design**
-- **Non-Resizable Text Areas**
 
 ## Quick Start
 
