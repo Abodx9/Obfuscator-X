@@ -30,12 +30,9 @@ Obfuscator-X is a tool for encoding and obfuscating strings across different pro
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 👨‍💻 Author
+## 👨‍💻 🎨
 
 **Abodx**  
 - GitHub: [Abodx9](https://github.com/Abodx9/)
-
-## 🎨 Desgin
-
 **DangerousAngel**  
 - GitHub: [DangerousAngel](https://github.com/DangerousAngel/)
