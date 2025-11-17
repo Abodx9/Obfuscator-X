@@ -32,7 +32,5 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 🎨
 
-**Abodx**  
 - GitHub: [Abodx9](https://github.com/Abodx9/)
-**DangerousAngel**  
 - GitHub: [DangerousAngel](https://github.com/DangerousAngel/)
