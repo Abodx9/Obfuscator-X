@@ -1,0 +1,173 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #160529 0%, #153367 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 650px;
+    box-shadow: 
+     0 35px 60px -15px rgb(255 255 255), 0 0 0 1px rgba(255, 255, 255, 0.2), 0 15px 40px rgba(106, 17, 203, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+	margin: 60px;
+}
+
+h2 {
+    font-size: 2.8rem;
+    margin-bottom: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #555;
+}
+
+.custom-select,
+.custom-textarea {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #e1e5e9;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #333;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-family: inherit;
+}
+
+.custom-select {
+    cursor: pointer;
+}
+
+.custom-select:focus,
+.custom-textarea:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+}
+
+.custom-textarea {
+    resize: none;
+    min-height: 120px;
+    overflow-y: auto;
+}
+
+.custom-textarea::placeholder {
+    color: #999;
+}
+
+.custom-button {
+    background: #6a11cb;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 25px 0;
+    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+    width: 100%;
+}
+
+.custom-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
+}
+
+.custom-button:active {
+    transform: translateY(1px);
+}
+
+/* BY Abodx9 , some css by DangerousAngel */
+.action-button {
+    background: transparent;
+    color: #6a11cb;
+    border: 2px solid #6a11cb;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+.author-credit {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.author-credit a {
+    color: #6a11cb;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.author-credit a:hover {
+    color: #2575fc;
+    text-decoration: underline;
+}
+
+.action-button:hover {
+    background: #6a11cb;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(106, 17, 203, 0.3);
+}
+
+.action-button:active {
+    transform: translateY(0);
+}
+
+.action-button.copied {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: #ffffff;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#resultText {
+    background: #f8f9fa;
+    font-weight: 500;
+}
