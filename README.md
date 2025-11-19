@@ -1,34 +1,32 @@
-# Obfuscator-X v2
+# Obfuscator-X
 Obfuscator-X is a tool for encoding and obfuscating strings across different programming languages with a lightweight and modern design.
+
 ![JustScreenShot](SS.jpg)
-## Features
-
-- **Multi-Language Support**: Encode strings for various programming languages including:
-  - Python
-  - Java
-  - JavaScript
-  - C
-  - C#
-  - Ruby
-  - Go
-  - Dart
-  - C++
-
-- **User-Friendly Interface**: Clean, modern design with gradient background and glass-morphism effects
-- **Easy Clipboard Integration**: One-click paste and copy functionality
 
 ## Quick Start
 
-1. **Select Programming Language**
-2. **Input Your String**
-3. **Obfuscate**
-4. **Copy Result**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Abodx9/Obfuscator-X.github
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd Obfuscator-X
+   ```
+
+3. Run the application:
+   ```bash
+   ./mvnw spring-boot:run 
+   ```
+4. Open your web browser and navigate to http://localhost:8080/index.html
+
+if you prefer using curl (example for python):
+   ```bash
+   curl -X POST --data "New Secret Key"  http://localhost:8080/encode-py
+   ```
 
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 👨‍💻 🎨
-
-- GitHub: [Abodx9](https://github.com/Abodx9/)
-- GitHub: [DangerousAngel](https://github.com/DangerousAngel/)
