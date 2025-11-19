@@ -1,49 +1,54 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Obfuscator X</title>
-    <script>
-         async function Obfuscatex() {
-            const inputText = document.getElementById('inputText').value;
-            const lang_endp = document.getElementById('ChosenProg').value;
-            const response = await fetch(lang_endp, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: inputText
-            });
-
-            if (response.ok) {
-                const resultText = await response.text();
-                document.getElementById('resultText').value = resultText;
-            } else {
-                document.getElementById('resultText').value = 'Error calling server';
-            }
-        }
+    <script src="func.js">
    </script>
 </head>
 <body>
-    <h2>Obfuscator X</h2>
-    <label for="ChosenProg">Language:</label><br>
-    <select id="ChosenProg">
-        <option value="/encode-py">Python</option>
-        <option value="/encode-ja">Java</option>
-        <option value="/encode-js">JavaScript</option>
-        <option value="/encode-c">C</option>
-        <option value="/encode-cs">C#</option>
-        <option value="/encode-ru">Ruby</option>
-        <option value="/encode-go">Go</option>
-        <option value="/encode-da">Dart</option>
-        <option value="/encode-cpp">C++</option>
-    </select>
-    <br><br>
-    <label for="inputText">String:</label><br>
-    <textarea id="inputText" rows="5" cols="50"></textarea><br><br>
+    <div class="container">
+        <h2>Obfuscator X</h2>
 
-    <button onclick="Obfuscatex()">Obfuscate</button><br><br>
+        
+        <div class="form-group">
+            <label for="ChosenProg">Language:</label>
+            <select id="ChosenProg" class="custom-select">
+                <option value="/encode-py">Python</option>
+                <option value="/encode-ja">Java</option>
+                <option value="/encode-js">JavaScript</option>
+                <option value="/encode-c">C</option>
+                <option value="/encode-cs">C#</option>
+                <option value="/encode-ru">Ruby</option>
+                <option value="/encode-go">Go</option>
+                <option value="/encode-da">Dart</option>
+                <option value="/encode-cpp">C++</option>
+            </select>
+        </div>
 
-    <label for="resultText">Result:</label><br>
-    <textarea id="resultText" rows="5" cols="50" readonly></textarea>
+        <div class="form-group">
+            <label for="inputText">Input String:</label>
+            <textarea id="inputText" class="custom-textarea" rows="5" placeholder="Enter your code here..."></textarea>
+            <div class="button-container">
+                <button class="action-button" onclick="pasteToInput()">Paste</button>
+            </div>
+        </div>
+
+        <button class="custom-button" onclick="Obfuscatex()">Obfuscate</button>
+
+        <div class="form-group">
+            <label for="resultText">Result:</label>
+            <textarea id="resultText" class="custom-textarea" rows="5" readonly placeholder="Obfuscated result will appear here..."></textarea>
+            <div class="button-container">
+                <button class="action-button copy" onclick="copyFromOutput()">Copy</button>
+            </div>
+        </div>
+		        <div class="author-credit">
+            by <a href="https://github.com/Abodx9/" target="_blank">Abodx </a>|<a href="https://github.com/DangerousAngel/" target="_blank"> DangerousAngel</a>
+        </div>
+    </div>
+	
 </body>
 </html>
