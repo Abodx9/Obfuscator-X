@@ -6,7 +6,7 @@ public class Tricks {
         StringBuffer sb = new StringBuffer();
         int len = code.length();
         sb.append(
-                "[setattr(__import__(\"sys\").modules[__name__], \"_sys\", __import__(\"sys\").modules[__name__]),setattr(_sys, \"x\", [");
+            "[setattr(__import__(\"sys\").modules[__name__], \"_sys\", __import__(\"sys\").modules[__name__]),setattr(_sys, \"x\", [");
         for (int i = 0; i < code.length(); i++) {
             int decpo = code.codePointAt(i);
             int trick = decpo - 1;
@@ -17,9 +17,9 @@ public class Tricks {
         sb.deleteCharAt(sb.length() - 1);
         sb.deleteCharAt(sb.length() - 1);
         sb.append(
-                "]),setattr(_sys, \"PyxGgdGhfKfgED\", []),[PyxGgdGhfKfgED.append(-abs(x[PyxGgUdGhfKfgEDx])) for PyxGgUdGhfKfgEDx in range("
-                        + Integer.valueOf(len)
-                        + ")],setattr(_sys, \"x\", ''.join(chr(a & 0xFFFF) for a in PyxGgdGhfKfgED))]");
+            "]),setattr(_sys, \"PyxGgdGhfKfgED\", []),[PyxGgdGhfKfgED.append(-abs(x[PyxGgUdGhfKfgEDx])) for PyxGgUdGhfKfgEDx in range(" +
+            Integer.valueOf(len) +
+            ")],setattr(_sys, \"x\", ''.join(chr(a & 0xFFFF) for a in PyxGgdGhfKfgED))]");
 
         return sb.toString();
     }
@@ -170,8 +170,8 @@ public class Tricks {
         for (int i = 0; i < code.length();) {
             int cp = code.codePointAt(i);
             if (cp > 0xFFFF || (cp >= 0xD800 && cp <= 0xDFFF)) {
-                throw new IllegalArgumentException("Ruby encoder requires BMP-only (no surrogates/emojis): U+"
-                        + Integer.toHexString(cp).toUpperCase());
+                throw new IllegalArgumentException("Ruby encoder requires BMP-only (no surrogates/emojis): U+" +
+                    Integer.toHexString(cp).toUpperCase());
             }
             i += Character.charCount(cp);
         }
@@ -276,8 +276,8 @@ public class Tricks {
 
         int len = code.length();
         StringBuilder sb = new StringBuilder();
-//        sb.append("#include <string>\n");   Only import when decoding
-//        sb.append("#include <cstdint>\n");
+        //        sb.append("#include <string>\n");   Only import when decoding
+        //        sb.append("#include <cstdint>\n");
         sb.append("std::string _x;\n");
         sb.append("const uint16_t _a[]={");
 
@@ -298,12 +298,50 @@ public class Tricks {
 
         sb.append("for(size_t _i=0;_i<sizeof(_a)/sizeof(_a[0]);++_i){\n");
         sb.append("  uint16_t _m=static_cast<uint16_t>((_i+1)^(")
-                .append(len)
-                .append("));\n");
+            .append(len)
+            .append("));\n");
         sb.append("  uint16_t _r=static_cast<uint16_t>(((_i+1)*5)%12+4);\n");
         sb.append("  uint16_t _v=_a[_i]^_m;\n");
         sb.append("  _v=static_cast<uint16_t>(((_v>>_r)|(_v<<(16-_r)))&0xFFFF);\n");
         sb.append("  _x+=static_cast<char>(_v);\n");
+        sb.append("}");
+
+        return sb.toString();
+    }
+
+
+    // Obfuscates string into self-decoding Rust using Rust-unique rotation ((i+1)*13%11+5), XOR masking, and ASCII-only obfuscated identifiers. again thaanks to Qwen AI
+    public static String encode_Rust(String code) {
+        if (code == null || code.isEmpty()) {
+            return "let mut x = String::new();";
+        }
+
+        int len = code.length();
+        StringBuilder sb = new StringBuilder();
+        sb.append("let mut _x = String::new();\n");
+        sb.append("let _a: [u16; ").append(len).append("] = [");
+
+        for (int i = 0; i < len; i++) {
+            char c = code.charAt(i);
+            int c16 = c & 0xFFFF;
+            int mask = (i + 1) ^ len;
+            int rot = ((i + 1) * 13) % 11 + 5;
+
+            int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+            int enc = rotated ^ mask;
+
+            sb.append("0x").append(String.format("%X", enc)).append("u16, ");
+        }
+        sb.setLength(sb.length() - 2); // remove trailing ", "
+        sb.append("];\n");
+
+        // Decoding — ASCII-only, idiomatic Rust
+        sb.append("for (_i, &_v) in _a.iter().enumerate() {\n");
+        sb.append("    let _m = ((_i + 1) ^ ").append(len).append(") as u16;\n");
+        sb.append("    let _r = (((_i + 1) * 13) % 11 + 5) as u32;\n");
+        sb.append("    let mut _d = _v ^ _m;\n");
+        sb.append("    _d = (_d >> _r) | (_d << (16 - _r));\n");
+        sb.append("    _x.push(std::char::from_u32(_d as u32).unwrap_or('?'));\n");
         sb.append("}");
 
         return sb.toString();
