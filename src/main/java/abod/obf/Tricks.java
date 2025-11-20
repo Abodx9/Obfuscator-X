@@ -249,33 +249,42 @@ public class Tricks {
         return sb.toString();
     }
 
-    // Simple Dart encoder using position-based subtraction
-
-    public static String encode_Da(String code) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("var x = '';");
-        sb.append("var arr = [");
-
-        for (int i = 0; i < code.length(); i++) {
-            int decpo = code.codePointAt(i);
-            int trick = decpo + (i - 4);
-            if (decpo > 0xffff) {
-                i++;
-            }
-            sb.append(String.format("0x%X, ", trick));
-        }
-
-        sb.setLength(sb.length() - 2);
-        sb.append("];");
-
-        sb.append("for (var i = 0; i < arr.length; i++) {");
-        sb.append("var v = arr[i];");
-        sb.append("v -= i - 4;");
-        sb.append("x += String.fromCharCode(v);");
-        sb.append("}");
-
-        return sb.toString();
+    
+// Obfuscates string into self-decoding Dart using unique rotation, XOR masking, and ASCII-only obfuscated identifiers.
+public static String encode_Da(String code) {
+    if (code == null || code.isEmpty()) {
+        return "var x='';";
     }
+
+    int len = code.length();
+    StringBuilder sb = new StringBuilder();
+    sb.append("var _x='';");
+    sb.append("var _9_=[");
+
+    for (int i = 0; i < len; i++) {
+        char c = code.charAt(i);
+        int c16 = c & 0xFFFF;
+        int mask = (i + 1) ^ len;
+        int rot = (((i + 1) << 1) % 13) + 3;
+
+        int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+        int enc = rotated ^ mask;
+
+        sb.append("0x").append(String.format("%X", enc)).append(",");
+    }
+    sb.setLength(sb.length() - 1);
+    sb.append("];");
+
+    sb.append("for(var $G=0;$G<_9_.length;$G++){");
+    sb.append("var _v3=($G+1)^_9_.length;");
+    sb.append("var _r9=((($G+1)<<1)%13)+3;");
+    sb.append("var _xXx=_9_[$G]^_v3;");
+    sb.append("var _9x=((_xXx>>_r9)|(_xXx<<(16-_r9)))&0xFFFF;");
+    sb.append("_x+=String.fromCharCode(_9x);");
+    sb.append("}");
+
+    return sb.toString();
+}
 
     // Obfuscates string into self-decoding C++ using C++-unique rotation
     // ((i+1)*5%12+4), XOR masking.
