@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RestController
 public class ObfuscatorController {
  
-  @GetMapping("/")
-  public String home() {
-    return "index";
-  }
+	// Comment this out, will make the index page be accessible in the root 
+  // @GetMapping("/")
+  // public String home() {
+  //   return "index";
+  // }
 
 
   @PostMapping("/encode-py")
