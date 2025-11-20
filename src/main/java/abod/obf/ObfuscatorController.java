@@ -66,4 +66,10 @@ public class ObfuscatorController {
   public String obfCpp(@RequestBody String input) {
     return Tricks.encode_Cpp(input);
   }
+
+
+  @PostMapping("/encode-rt")
+  public String obfRust(@RequestBody String input) {
+	return Tricks.encode_Rust(input);	  
+  }	
 }
