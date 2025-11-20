@@ -126,21 +126,21 @@ label {
     transition: all 0.3s ease;
     margin-top: 8px;
 }
-.author-credit {
+.source-code {
     text-align: center;
     margin-bottom: 30px;
     font-size: 0.9rem;
     color: #666;
 }
 
-.author-credit a {
+.source-code a {
     color: #6a11cb;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s ease;
 }
 
-.author-credit a:hover {
+.source-code a:hover {
     color: #2575fc;
     text-decoration: underline;
 }
