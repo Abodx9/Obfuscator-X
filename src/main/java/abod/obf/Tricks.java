@@ -197,15 +197,15 @@ public class Tricks {
 
             sb.append("\\u").append(String.format("%04X", enc & 0xFFFF));
         }
-        sb.append("\";\n");
+        sb.append("\";");
 
-        sb.append("چ = x.length\n");
-        sb.append("x = x.codepoints.map.with_index { |ﮬ, ک|\n");
-        sb.append("  ڈ = (ک + 1) ^ چ\n");
-        sb.append("  ڒ = ((ک + 1) % 9) + 6\n");
-        sb.append("  ژ = ﮬ ^ ڈ\n");
-        sb.append("  val = ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF\n");
-        sb.append("  val\n");
+		sb.append("چ = x.length;");
+        sb.append("x = x.codepoints.map.with_index { |ﮬ, ک|;");
+        sb.append("ڈ = (ک + 1) ^ چ;");
+        sb.append("ڒ = ((ک + 1) % 9) + 6;");
+        sb.append("ژ = ﮬ ^ ڈ;");
+        sb.append("val = ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
+        sb.append("val");
         sb.append("}.pack('U*').force_encoding('UTF-8')");
 
         return sb.toString();
@@ -220,7 +220,7 @@ public class Tricks {
         // Go supports Unicode identifiers (since Go 1.17+), but keep it safe
         int len = code.length();
         StringBuilder sb = new StringBuilder();
-        sb.append("var x string\n");
+        sb.append("var x string;");
         sb.append("ﭼ := []int{");
 
         for (int i = 0; i < len; i++) {
@@ -235,15 +235,15 @@ public class Tricks {
             sb.append("0x").append(Integer.toHexString(enc)).append(", ");
         }
         sb.setLength(sb.length() - 2);
-        sb.append("}\n");
+        sb.append("};");
 
         // Decoding loop — Go allows Unicode identifiers (U+06xx is fine)
-        sb.append("for ک, ﮬ := range ﭼ {\n");
-        sb.append("  ڈ := (ک + 1) ^ len(ﭼ)\n");
-        sb.append("  ڒ := ((ک + 1) * 11) % 14 + 2\n");
-        sb.append("  ژ := ﮬ ^ ڈ\n");
-        sb.append("  ڠ := ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF\n");
-        sb.append("  x += string(rune(ڠ))\n");
+        sb.append("for ک, ﮬ := range ﭼ {");
+        sb.append("  ڈ := (ک + 1) ^ len(ﭼ);");
+        sb.append("  ڒ := ((ک + 1) * 11) % 14 + 2;");
+		sb.append("  ژ := ﮬ ^ ڈ;");
+        sb.append("  ڠ := ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF;");
+        sb.append("  x += string(rune(ڠ))");
         sb.append("}");
 
         return sb.toString();
@@ -290,7 +290,7 @@ public class Tricks {
         StringBuilder sb = new StringBuilder();
         //        sb.append("#include <string>\n");   Only import when decoding
         //        sb.append("#include <cstdint>\n");
-        sb.append("std::string _x;\n");
+        sb.append("std::string _x;");
         sb.append("const uint16_t _a[]={");
 
         // Encode each char (BMP assumed)
@@ -306,16 +306,16 @@ public class Tricks {
             sb.append("0x").append(String.format("%X", enc)).append(",");
         }
         sb.setLength(sb.length() - 1);
-        sb.append("};\n");
+        sb.append("};");
 
-        sb.append("for(size_t _i=0;_i<sizeof(_a)/sizeof(_a[0]);++_i){\n");
+        sb.append("for(size_t _i=0;_i<sizeof(_a)/sizeof(_a[0]);++_i){");
         sb.append("  uint16_t _m=static_cast<uint16_t>((_i+1)^(")
             .append(len)
-            .append("));\n");
-        sb.append("  uint16_t _r=static_cast<uint16_t>(((_i+1)*5)%12+4);\n");
-        sb.append("  uint16_t _v=_a[_i]^_m;\n");
-        sb.append("  _v=static_cast<uint16_t>(((_v>>_r)|(_v<<(16-_r)))&0xFFFF);\n");
-        sb.append("  _x+=static_cast<char>(_v);\n");
+            .append("));");
+        sb.append("uint16_t _r=static_cast<uint16_t>(((_i+1)*5)%12+4);");
+        sb.append("uint16_t _v=_a[_i]^_m;");
+        sb.append("_v=static_cast<uint16_t>(((_v>>_r)|(_v<<(16-_r)))&0xFFFF);");
+        sb.append("_x+=static_cast<char>(_v);");
         sb.append("}");
 
         return sb.toString();
@@ -330,7 +330,7 @@ public class Tricks {
 
         int len = code.length();
         StringBuilder sb = new StringBuilder();
-        sb.append("let mut _x = String::new();\n");
+        sb.append("let mut _x = String::new();");
         sb.append("let _a: [u16; ").append(len).append("] = [");
 
         for (int i = 0; i < len; i++) {
@@ -345,15 +345,15 @@ public class Tricks {
             sb.append("0x").append(String.format("%X", enc)).append("u16, ");
         }
         sb.setLength(sb.length() - 2); // remove trailing ", "
-        sb.append("];\n");
+        sb.append("];");
 
         // Decoding — ASCII-only, idiomatic Rust
-        sb.append("for (_i, &_v) in _a.iter().enumerate() {\n");
-        sb.append("    let _m = ((_i + 1) ^ ").append(len).append(") as u16;\n");
-        sb.append("    let _r = (((_i + 1) * 13) % 11 + 5) as u32;\n");
-        sb.append("    let mut _d = _v ^ _m;\n");
-        sb.append("    _d = (_d >> _r) | (_d << (16 - _r));\n");
-        sb.append("    _x.push(std::char::from_u32(_d as u32).unwrap_or('?'));\n");
+        sb.append("for (_i, &_v) in _a.iter().enumerate() {");
+        sb.append("let _m = ((_i + 1) ^ ").append(len).append(") as u16;");
+        sb.append("let _r = (((_i + 1) * 13) % 11 + 5) as u32;");
+        sb.append("let mut _d = _v ^ _m;");
+        sb.append("_d = (_d >> _r) | (_d << (16 - _r));");
+        sb.append("_x.push(std::char::from_u32(_d as u32).unwrap_or('?'));");
         sb.append("}");
 
         return sb.toString();
