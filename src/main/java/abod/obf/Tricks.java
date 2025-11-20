@@ -211,27 +211,39 @@ public class Tricks {
         return sb.toString();
     }
 
-    // Simple Go encoder using position-based addition
-
+    // Obfuscates string into self-decoding Go using Go-unique rotation, XOR masking, and Unicode identifiers.
     public static String encode_Go(String code) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("var x string;");
-        sb.append("arr := []int{");
+        if (code == null || code.isEmpty()) {
+            return "var x string";
+        }
 
-        for (int i = 0; i < code.length(); i++) {
-            int decpo = code.codePointAt(i);
-            int trick = decpo + (i * 2);
-            if (decpo > 0xffff) {
-                i++;
-            }
-            sb.append(String.format("0x%X, ", trick));
+        // Go supports Unicode identifiers (since Go 1.17+), but keep it safe
+        int len = code.length();
+        StringBuilder sb = new StringBuilder();
+        sb.append("var x string\n");
+        sb.append("ﭼ := []int{");
+
+        for (int i = 0; i < len; i++) {
+            char c = code.charAt(i); // BMP assumed
+            int c16 = c & 0xFFFF;
+            int mask = (i + 1) ^ len;
+            int rot = ((i + 1) * 11) % 14 + 2;
+
+            int rotated = ((c16 << rot) | (c16 >>> (16 - rot))) & 0xFFFF;
+            int enc = rotated ^ mask;
+
+            sb.append("0x").append(Integer.toHexString(enc)).append(", ");
         }
         sb.setLength(sb.length() - 2);
-        sb.append("};");
+        sb.append("}\n");
 
-        sb.append("for i, v := range arr {");
-        sb.append("v -= i * 2;");
-        sb.append("x += string(rune(v));");
+        // Decoding loop — Go allows Unicode identifiers (U+06xx is fine)
+        sb.append("for ک, ﮬ := range ﭼ {\n");
+        sb.append("  ڈ := (ک + 1) ^ len(ﭼ)\n");
+        sb.append("  ڒ := ((ک + 1) * 11) % 14 + 2\n");
+        sb.append("  ژ := ﮬ ^ ڈ\n");
+        sb.append("  ڠ := ((ژ >> ڒ) | (ژ << (16 - ڒ))) & 0xFFFF\n");
+        sb.append("  x += string(rune(ڠ))\n");
         sb.append("}");
 
         return sb.toString();
