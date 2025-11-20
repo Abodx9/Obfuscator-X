@@ -72,5 +72,11 @@ public class ObfuscatorController {
   @PostMapping("/encode-rt")
   public String obfRust(@RequestBody String input) {
 	return Tricks.encode_Rust(input);	  
-  }	
+  }
+
+
+  @PostMapping("/encode-sw")
+  public String obfSwift(@RequestBody String input) {
+	return Tricks.encode_Swift(input);	  
+  }
 }
