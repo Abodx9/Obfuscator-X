@@ -1,5 +1,6 @@
 # Obfuscator-X
-Obfuscator-X is a tool for encoding and obfuscating strings across different programming languages with a lightweight and modern design.
+Obfuscator-X is a tool for encoding and obfuscating strings across different programming languages with a lightweight and modern design. 
+## Try the app [here](https://obfuscatorx-abodx9.koyeb.app/)
 
 ![JustScreenShot](SS.jpg)
 
@@ -19,7 +20,7 @@ Obfuscator-X is a tool for encoding and obfuscating strings across different pro
    ```bash
    ./mvnw spring-boot:run 
    ```
-4. Open your web browser and navigate to http://localhost:8080/index.html
+4. Open your web browser and navigate to http://localhost:8080/
 
 if you prefer using curl (example for python):
    ```bash
